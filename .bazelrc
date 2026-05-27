@@ -21,14 +21,14 @@ test --test_output=errors
 common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
 common --registry=https://bcr.bazel.build
 
-common --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0-posix
+common --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0
 common --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
 
 # -------------------------------------------------------------------------------
 # Config dedicated to host platform CPU:x86_64 and OS:Linux
 # -------------------------------------------------------------------------------
 build:x86_64-linux --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
-build:x86_64-linux --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0-posix
+build:x86_64-linux --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0
 build:x86_64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
 
 # Clippy linting (enabled by default)
@@ -39,6 +39,22 @@ build:lint --@aspect_rules_lint//lint:fail_on_violation=true
 build:lint-rust --aspects=@rules_rust//rust:defs.bzl%rust_clippy_aspect
 build:lint-rust --output_groups=+clippy_checks
 build:lint-rust --@rules_rust//:clippy.toml=//:clippy.toml
+
+# -------------------------------------------------------------------------------
+# Config dedicated to host platform CPU:x86_64 and OS:AutoSD
+# -------------------------------------------------------------------------------
+build:x86_64-autosd --force_pic
+build:x86_64-autosd --platforms=@score_bazel_platforms//:x86_64-linux-autosd10
+build:x86_64-autosd --extra_toolchains=@score_autosd10_x86_64_toolchain//:x86_64-linux-autosd10
+build:x86_64-autosd --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
+
+# -------------------------------------------------------------------------------
+# Config dedicated to host platform CPU:aarch64 and OS:AutoSD
+# -------------------------------------------------------------------------------
+build:aarch64-autosd --force_pic
+build:aarch64-autosd --platforms=@score_bazel_platforms//:aarch64-linux-autosd10
+build:aarch64-autosd --extra_toolchains=@score_autosd10_aarch64_toolchain//:aarch64-linux-autosd10
+build:aarch64-autosd --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_aarch64_unknown_linux_gnu
 
 # Communication integration
 common --@score_logging//score/mw/log/flags:KRemote_Logging=False

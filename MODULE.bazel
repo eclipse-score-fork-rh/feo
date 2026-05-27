@@ -98,6 +98,11 @@ bazel_dep(name = "score_docs_as_code", version = "3.0.1")
 bazel_dep(name = "rules_cc", version = "0.2.16")
 
 bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.2.2", dev_dependency = True)
+git_override(
+    module_name = "score_bazel_cpp_toolchains",
+    commit = "72c29412933fbac67086b3566007ef5ee0862d99",
+    remote = "https://github.com/eclipse-score/bazel_cpp_toolchains.git",
+)
 
 # Extensions
 gcc = use_extension("@score_bazel_cpp_toolchains//extensions:gcc.bzl", "gcc", dev_dependency = True)
@@ -115,10 +120,27 @@ gcc.toolchain(
     use_default_package = True,
     version = "12.2.0",
 )
+## AutoSD10 Toolchain
+gcc.toolchain(
+    name = "score_autosd10_x86_64_toolchain",
+    runtime_ecosystem = "autosd10",
+    target_cpu = "x86_64",
+    target_os = "linux",
+    use_default_package = True,
+)
+gcc.toolchain(
+    name = "score_autosd10_aarch64_toolchain",
+    runtime_ecosystem = "autosd10",
+    target_cpu = "aarch64",
+    target_os = "linux",
+    use_default_package = True,
+)
 use_repo(
     gcc,
     "score_gcc_aarch64_toolchain",
     "score_gcc_x86_64_toolchain",
+    "score_autosd10_aarch64_toolchain",
+    "score_autosd10_x86_64_toolchain",
 )
 
 # Rust toolchain
