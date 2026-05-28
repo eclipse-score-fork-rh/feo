@@ -1,0 +1,48 @@
+diff --git a/src/log/score_log_fmt/fmt.rs b/src/log/score_log_fmt/fmt.rs
+index 05ac5aa..899eab0 100644
+--- a/src/log/score_log_fmt/fmt.rs
++++ b/src/log/score_log_fmt/fmt.rs
+@@ -71,7 +71,7 @@ pub struct Placeholder<'a> {
+ impl<'a> Placeholder<'a> {
+     /// Create the placeholder to be represented using `ScoreDebug`.
+     pub const fn new<T: ScoreDebug>(value: &'a T, spec: FormatSpec) -> Self {
+-        let value = NonNull::from_ref(value).cast();
++        let value = unsafe { NonNull::new_unchecked(value as *const _ as *mut ()).cast() };
+         let formatter = |v: NonNull<()>, f: Writer, spec: &FormatSpec| {
+             // SAFETY: borrow checker will ensure that value won't be mutated for as long as the returned `Self` instance is alive.
+             let typed = unsafe { v.cast::<T>().as_ref() };
+diff --git a/src/log/stdout_logger/lib.rs b/src/log/stdout_logger/lib.rs
+index 174a90f..0a0a11e 100644
+--- a/src/log/stdout_logger/lib.rs
++++ b/src/log/stdout_logger/lib.rs
+@@ -291,7 +291,7 @@ impl Log for StdoutLogger {
+             if self.show_timestamp {
+                 if let Ok(now) = SystemTime::now().duration_since(UNIX_EPOCH) {
+                     let timestamp_u8 = timestamp(now);
+-                    let timestamp_str = unsafe { str::from_utf8_unchecked(timestamp_u8.as_slice()) };
++                    let timestamp_str = core::str::from_utf8(timestamp_u8.as_slice()).unwrap_or("");
+                     let _ = score_write!(writer, "[{}]", timestamp_str);
+                 }
+             }
+diff --git a/src/log/stdout_logger/timestamp.rs b/src/log/stdout_logger/timestamp.rs
+index 573f8fb..d6da69a 100644
+--- a/src/log/stdout_logger/timestamp.rs
++++ b/src/log/stdout_logger/timestamp.rs
+@@ -20,7 +20,7 @@ use core::time::Duration;
+ 
+ /// Determine if provided year is a leap year.
+ fn is_leap_year(year: u64) -> bool {
+-    (year.is_multiple_of(4) && !year.is_multiple_of(100)) || year.is_multiple_of(400)
++    (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
+ }
+ 
+ /// Calculate time - hour, minute, second.
+@@ -113,7 +113,7 @@ pub fn timestamp(duration_since_epoch_start: Duration) -> [u8; 27] {
+     let (year, month, day) = get_date(days_in_epoch);
+ 
+     // Format output as `u8` array of known size.
+-    let mut output = [0; _];
++    let mut output = [0; 27];
+ 
+     // Write date in `YYYY/MM/dd ` format.
+     write::<4>(&mut output[0..4], year);

@@ -110,8 +110,8 @@ impl ScoreDebug for ScoreDebugIoError {
             ErrorKind::Deadlock => f.write_str("Deadlock", spec),
             ErrorKind::CrossesDevices => f.write_str("CrossesDevices", spec),
             ErrorKind::TooManyLinks => f.write_str("TooManyLinks", spec),
-            ErrorKind::InvalidFilename => f.write_str("InvalidFilename", spec),
-            ErrorKind::ArgumentListTooLong => f.write_str("ArgumentListTooLong", spec),
+            // ErrorKind::InvalidFilename is unstable, handle in _ pattern
+            // ErrorKind::ArgumentListTooLong is unstable, handle in _ pattern
             ErrorKind::Interrupted => f.write_str("Interrupted", spec),
             ErrorKind::Unsupported => f.write_str("Unsupported", spec),
             ErrorKind::UnexpectedEof => f.write_str("UnexpectedEof", spec),

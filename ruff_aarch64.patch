@@ -1,0 +1,19 @@
+diff --git a/python_basics/multitool.lock.json b/python_basics/multitool.lock.json
+index b38b101..8a68e5f 100644
+--- a/python_basics/multitool.lock.json
++++ b/python_basics/multitool.lock.json
+@@ -9,6 +9,14 @@
+         "sha256": "69b9d9228ecadcffec970976e7d5c989064c2129ab03e606b3f96e588bcc1ffc",
+         "os": "linux",
+         "cpu": "x86_64"
++      },
++      {
++        "kind": "archive",
++        "file": "ruff-aarch64-unknown-linux-gnu/ruff",
++        "url": "https://github.com/astral-sh/ruff/releases/download/0.11.4/ruff-aarch64-unknown-linux-gnu.tar.gz",
++        "sha256": "6fbc86c6668dbf910d95722e15d0504e1dc40b4ed0a0270ed1d25d43e44aea80",
++        "os": "linux",
++        "cpu": "arm64"
+       }
+     ]
+   }

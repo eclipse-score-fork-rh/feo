@@ -27,7 +27,12 @@ RUN dnf update -y && \
         rpm-build \
         clang \
         clang-devel \
-        llvm-devel
+        llvm-devel \
+        python3 \
+        python3-pip
+
+# Install ruff for Python linting
+RUN pip3 install ruff
 
 RUN wget https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-linux-arm64 && \
     chmod +x bazel-${BAZEL_VERSION}-linux-arm64 && \

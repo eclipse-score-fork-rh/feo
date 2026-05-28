@@ -24,6 +24,11 @@ bazel_dep(name = "score_tooling", version = "1.1.2")
 git_override(
     module_name = "score_tooling",
     commit = "58581abf75b321defbb53ffbad3b65e7f62b5082",
+    patches = [
+        "//:sphinx_aarch64_toolchain.patch",
+        "//:ruff_aarch64.patch",
+    ],
+    patch_strip = 1,
     remote = "https://github.com/eclipse-score/tooling.git",
 )
 
@@ -32,6 +37,8 @@ bazel_dep(name = "score_baselibs_rust", version = "0.1.0")
 git_override(
     module_name = "score_baselibs_rust",
     commit = "1b9f2786cd746ae9745dd2e81bf9073b4185a5e2",
+    patches = ["//:baselibs_rust_stable.patch"],
+    patch_strip = 1,
     remote = "https://github.com/eclipse-score/baselibs_rust.git",
 )
 
@@ -94,6 +101,12 @@ bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
 bazel_dep(name = "googletest", version = "1.17.0")
 bazel_dep(name = "score_docs_as_code", version = "3.0.1")
 
+# Force score_docs_as_code to 3.0.1 to resolve compatibility conflict
+single_version_override(
+    module_name = "score_docs_as_code",
+    version = "3.0.1",
+)
+
 # Toolchains
 bazel_dep(name = "rules_cc", version = "0.2.16")
 
@@ -101,6 +114,8 @@ bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.2.2", dev_dependency
 git_override(
     module_name = "score_bazel_cpp_toolchains",
     commit = "72c29412933fbac67086b3566007ef5ee0862d99",
+    patches = ["//:autosd_aarch64_exec_platform.patch"],
+    patch_strip = 1,
     remote = "https://github.com/eclipse-score/bazel_cpp_toolchains.git",
 )
 
@@ -144,7 +159,7 @@ use_repo(
 )
 
 # Rust toolchain
-bazel_dep(name = "score_toolchains_rust", version = "0.4.0", dev_dependency = True)
+bazel_dep(name = "score_toolchains_rust", version = "0.8.0", dev_dependency = True)
 bazel_dep(name = "score_rust_policies", version = "0.0.5", dev_dependency = True)
 
 # Prost toolchain
